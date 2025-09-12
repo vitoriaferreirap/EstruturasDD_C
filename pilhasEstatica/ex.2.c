@@ -11,7 +11,7 @@
 
 //molde para os objetos - dados abstratos
 typedef struct{
-  int decimal;
+  int num;
 } Objeto;
 
 typedef struct{
@@ -29,16 +29,51 @@ bool estaVazia(PilhaEstatica *p) { return (p->topo == 0); }
 //verifica se esta cheia
 bool estaCheia(PilhaEstatica *p) { return (p->topo == MAXTAM); }
 
-void push(PilhaEstatica *p, int decimal){
+//assinatura - prototipo
+int pop(PilhaEstatica *p);
+
+void push(PilhaEstatica *p, int num){
     if(!estaCheia(p)){
-      p->vetor[p->topo].decimal = decimal;  // topo é a ultia possicao livre
-      p->topo++;//atualiza ponteiro
+        //add a lista 
+        p->vetor[p->topo].num = num;  // topo é a ultia possicao livre
+        p->topo++;//atualiza ponteiro
+    }
+}
+int pop(PilhaEstatica *p){
+    if(!estaVazia(p)){
+      int valor = p->vetor[p->topo - 1].num;
+      p->topo--;
+      return valor;
+    }else{
+      printf("Lista Vazia.");
     }
 }
 
+void converterBinario(PilhaEstatica *p, int decimal){
+    //caso especia se a entrada for 0
+    if(decimal == 0){
+      printf("Binario: 0\n");
+      return;
+    }
+    int n = decimal;
+    while(n > 0 ){
+        int resto = n % 2;   // 0 ou 1
+        push(p, resto);        // empilha ESTE bit agora
+        n = n / 2;
+    }
+    printf("Decimal %d e binario: ", decimal);
+
+    while(!estaVazia(p)){
+      printf("%d", pop(p));
+    }
+    printf("\n");
+}
+
+
+
 void imprimirPilha(PilhaEstatica *p) { 
     for (int i = 0; i < p->topo; i++){
-      printf("%d ", p->vetor[i].decimal);
+      printf("%d ", p->vetor[i].num);
     }
     printf("\n");
 }
@@ -52,11 +87,13 @@ int main() {
     }
 
     //empilhar eleentos na pilha
-    int decimal[] = {13, 6, 3, 1};
+    int num[] = {13, 6, 3, 1};
     for (int i = 0; i < 4; i++){
-      push(&pObjeto, decimal[i]);
-      imprimirPilha(&pObjeto);
-    } 
+        push(&pObjeto, num[i]);
+        imprimirPilha(&pObjeto);
+    }
+    inicializaPilha(&pObjeto);
+    converterBinario(&pObjeto, 13);
 
     return 0;
 }
