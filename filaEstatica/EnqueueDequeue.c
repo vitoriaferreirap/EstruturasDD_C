@@ -22,10 +22,10 @@ void iniciaFila(FilaEstatica *f){
 }
 
 //vazia
-bool estaVazia(FilaEstatica *f) { retunr(f->qtd == 0); }
+bool estaVazia(FilaEstatica *f) { return (f->qtd == 0); }
 
 //cheia
-bool estaCheia(FilaEstatica *f) { return (f->qtd == 10); }
+bool estaCheia(FilaEstatica *f) { return (f->qtd == TAMANHO); }
 
 //retorna tamanho da fila
 int tamanhoFila(FilaEstatica *f) { return (f->qtd); }
@@ -66,37 +66,83 @@ void enqueueFila(FilaEstatica *f, int valor){
 
 //imprimir Fila
 void imprimirFila(FilaEstatica *f){
-    //inicio -> fim
+    // [Inicio -> Fim]
+    printf("Fila = [");
     if(!estaVazia(f)){
       int n = f->inicio;
       while (n != f->fim){
         printf("%d ", f->vetor[n]);
         n = incrementaIndice(n);
       }
-      printf("%d ", f->vetor[n]);
+      printf("%d ", f->vetor[n]); // último (fim)
     }
+    printf("]\n");
 }
 
 //remover
-void dequeueFila(FilaEstatica *f, int valor){
-    if(!estaVazia(f)){
-        //incrementa valor de inicio
-        f->inicio = incrementaIndice(f->inicio);  // buffer circular
-        // decrementa a qtd de elementos
-        f->qtd--;
-    }else{
-      printf("Fila vazia.");
-    }
+void dequeueFila(FilaEstatica *f) {
+  if (!estaVazia(f)) {
+    // incrementa valor de inicio
+    f->inicio = incrementaIndice(f->inicio);  // buffer circular
+    // decrementa a qtd de elementos
+    f->qtd--;
+  } else {
+    printf("Fila vazia.");
+  }
 }
 
 //imprimir o primeiro elemento
 int primeiroElementoFila(FilaEstatica *f){
     //se nao estiver vazia retorna o vetor[inicio]
-    f->vetor[f->inicio];
+   if (!estaVazia(f)) {
+    return f->vetor[f->inicio];
+  }
+  printf("Warning: fila vazia!\n");
+  return -1;
 }
 
 //imprimir o ultimo elemento da fila
 int ultimoElementoFila(FilaEstatica *f){
     //se nao estiver vazia retorna o vetor[fim]
-    f->vetor[f->fim];
+   if (!estaVazia(f)) {
+    return f->vetor[f->fim];
+  }
+  printf("Warning: fila vazia!\n");
+  return -1;
+}
+
+int main(){
+    FilaEstatica fila;
+    iniciaFila(&fila); // passa endereco do ponteiro p funcao
+    
+    if(estaVazia(&fila)){
+      printf("Fila Vazia");
+    }else{
+      printf("H elementos da fila");
+    }
+
+    if(estaCheia(&fila)){
+      printf("Fila cheia");
+    }else{
+      printf("Nao esta cheia");
+    }
+
+    int tam = tamanhoFila(&fila);
+    printf("Tamanho = %d]n", tam);
+
+    int inserir[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+    int i;
+
+    //inserindo e imprimindo numero um por um 
+    for (i = 0; i < 11; i ++){
+      enqueueFila(&fila, inserir[i]);
+      imprimirFila(&fila);
+    } 
+
+    //remover e imprimindo numero um por um 
+    for (i = 0; i < 11; i ++){
+      dequeueFila(&fila);
+      imprimirFila(&fila);
+    }
+    return 0;
 }
