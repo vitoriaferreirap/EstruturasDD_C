@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// EXERCICIO 1
-//cada nó tem apenas um ponteiro para o próximo (proximo).
+// EXERCICIO 2
+// cada nó tem dois ponteiros: um para o próximo nó e outro para o nó anterior.
 // cria apelido (PtrNoLista) que equivale a struct NoLista* - so prepara o nome
 // do ponteiro
 typedef struct NoLista *PtrNoLista;
@@ -12,6 +12,7 @@ typedef struct NoLista *PtrNoLista;
 typedef struct NoLista {
   int chave;          // dados
   PtrNoLista proximo; // ponteiro proximo
+  PtrNoLista anterior;
 } NoLista;
 
 // tipo para a lista
@@ -45,6 +46,7 @@ void inserir(Lista *p, int valor){
     // Se o valor do novo nó é menor que o primeiro nó da lista, ele deve ser colocado na frente.
     else if(valor < p->inicio->chave) {
         novo->proximo = p->inicio; //O novo nó passa a apontar para o antigo primeiro.
+        p->inicio->anterior = novo; //atrualiza o anterior do aantigo
         p->inicio = novo;//atualiza
     }
     else{ //Se o valor do novo nó é maior que o primeiro no
@@ -54,17 +56,39 @@ void inserir(Lista *p, int valor){
         aux = aux->proximo; //avaca prox no
       }
       novo->proximo = aux->proximo; //o novo nó aponta para o próximo nó da lista
-      aux->proximo = novo; //o nó anterior agora aponta para o novo nó.
+      if(aux->proximo != NULL){
+        aux->proximo->anterior = novo;
+      }
+      aux->proximo = novo;
+      novo->anterior = aux;
     }
     p->qtd++;
 }
-
+//sentido horario
 void imprimir(Lista *p){
     PtrNoLista aux;
     //inicia no incio, contua ate nao achar null, e a cada laco aux aponta para o proximo
     for (aux = p->inicio; aux != NULL; aux = aux->proximo) {
       printf("%d ", aux->chave);
     }
+    
+        printf("\n");
+}
+//sentido antihorario
+void imprimirAnti(Lista *p){
+    PtrNoLista aux = p->inicio;
+    //primeiro ir ate o ultimo no
+    while (aux->proximo != NULL){
+      aux = aux->proximo;
+    } 
+
+    //segungo percorre de tras para usar o ponteiro anterior
+    while (aux != NULL){
+      printf("%d ", aux->chave);
+      aux = aux->anterior;
+    }
+    
+    
 }
 
 int main() {
@@ -92,7 +116,5 @@ int main() {
     inserir(&minhaLista, 7);
     inserir(&minhaLista, 3);
     imprimir(&minhaLista);
-
-
-
+    imprimirAnti(&minhaLista);
 }
