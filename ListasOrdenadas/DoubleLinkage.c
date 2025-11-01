@@ -74,7 +74,34 @@ void imprimir(Lista *p){
     printf("\n");
 }
 
-//void excluir(Lista *p, int valorBuscado){}
+void excluir(Lista *p, int valorBuscado) { 
+    Node atual = p->head; //ira percorrer a lista buscando o valor que eu quero remover
+    Node anterior = NULL;
+
+    
+    // Percorre a lista até encontrar o valor ou chegar ao fim
+    while (atual->dado != valorBuscado){ //buscando por um valor especifico
+      anterior = atual;// anterior "fica" uma caixa atrás do atual
+      atual = atual->proximo; // atual anda para a próxima caixa
+    }
+    // Se atual for NULL, significa que chegamos ao fim da lista sem achar o valor
+    if(atual == NULL){
+      printf("Valor nao encontrado");
+    }
+    // Se anterior for NULL, significa que o nó a remover é o primeiro da lista
+     if (anterior == NULL) {    // valor está na primeira caixa
+        p->head = atual->proximo;
+        if (atual->proximo != NULL)
+            atual->proximo->anterior = NULL; // novo primeiro nó não tem anterior
+    } else { // valor a ser removido esta no meio ou final
+        anterior->proximo = atual->proximo;
+        if (atual->proximo != NULL)
+            atual->proximo->anterior = anterior;
+    }
+
+    free(atual);               
+    p->qtd--;                   
+}
 
 int main(){
 
@@ -99,7 +126,7 @@ int main(){
 
     imprimir(&minhaLista);
 
-    //excluir(&minhaLista, 2);
+    excluir(&minhaLista, 2);
 
     tam = tamanho(&minhaLista);
     printf("Tamanho da lista: %d \n", tam);
