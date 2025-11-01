@@ -44,6 +44,26 @@ int tamanho(Lista *p){
     return tam;
 }
 
+//imprimir lista
+void imprimir(Lista *p){
+    //nao cria nó na memoria e sim ponteiro (variavel local)
+    Node atual = p->head; //atual aponta para onde head aponta
+
+    //ver se a lista está vazia
+    if(atual == NULL){
+      printf("Lista vazia.\n");
+      return;
+    }
+
+    printf("Elementos da lista: ");
+
+    while (atual != NULL){
+      printf("%d ", atual->dado);
+      atual = atual->proximo;
+    }
+    printf("\n");
+}
+
 int main(){
 
     //variavel tipo Lista
@@ -55,4 +75,16 @@ int main(){
     //ver tamanho da lista
     int tam = tamanho(&minhaLista);
     printf("Tamanho da lista: %d \n", tam);
+    
+    imprimir(&minhaLista);
+
+    inserir(&minhaLista, 1);
+    inserir(&minhaLista, 2);
+
+    tam = tamanho(&minhaLista);
+    printf("Tamanho da lista: %d \n", tam);
+
+    imprimir(&minhaLista);
+
+    return 0;
 }
