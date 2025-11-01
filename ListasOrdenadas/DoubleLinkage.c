@@ -2,119 +2,109 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// EXERCICIO 2
-// cada nó tem dois ponteiros: um para o próximo nó e outro para o nó anterior.
-// cria apelido (PtrNoLista) que equivale a struct NoLista* - so prepara o nome
-// do ponteiro
-typedef struct NoLista *PtrNoLista;
+// Lista encadeada: 
+//cria um apelido (alias) chamado Node para o tipo struct No*.
+typedef struct No *Node; // * DIZ : Node é um ponteiro para struct No
 
-// tipo para o No da lista
-typedef struct NoLista {
-  int chave;          // dados
-  PtrNoLista proximo; // ponteiro proximo
-  PtrNoLista anterior;
-} NoLista;
+//estrutura de um no da lista
+//primeiro nó da lista, cada nó tem o dado e um ponteiro proximo
+//estrutuda do nó
+typedef struct No{
+  int dado;
+  Node proximo; //variável do tipo Node, um ponteiro para struct No.
+  Node anterior;//criada para criar a lista duplamente encadeada
+}No;//estrutura do no , node ponteiro da estrutura No
 
-// tipo para a lista
-typedef struct {
-  PtrNoLista inicio; // ponteiro inicio
-  int qtd;           // contados
+//criando lista
+typedef struct{
+  Node head; //ponteiro inicial (head->Node)
+  int qtd;
 } Lista;
 
-void inicializar(Lista *p) {
-  p->inicio = NULL;
-  p->qtd = 0;
+//inicializa lista
+void inicializa(Lista *p){
+    p->head = NULL; //nao existe nó aqui, head é o ponteiro que indica o incio da lista
+    printf("Lista inicializada \n");
 }
 
-bool estaVazia(Lista *p) { return (p->inicio == NULL); }
-
-int tamanho(Lista *p) {
-  int tam = p->qtd;
-  return tam;
-}
-
+//inserir
 void inserir(Lista *p, int valor){
-    //criando no para inserir na lista, aloca memoria dinamica
-    PtrNoLista novo = (PtrNoLista) malloc(sizeof(NoLista));
-    novo->chave = valor; //novo no pega o valor
+    //1-criar novo no
+    Node novo = (Node) malloc(sizeof(No));  //carrega o dado, ponteiros: anterior e proximo
+    novo->dado = valor;
 
-    if(estaVazia(p)){
-        p->inicio = novo;
-        novo->proximo = NULL;
+    //ligando novo nó a lista
+    novo->proximo = p->head; //novo nó aponta(com seu ponteiro proximo) para o antigo primeiro no
+    novo->anterior = NULL;
+
+    //Se novo->proximo != NULL, significa que existe um nó depois do novo, então precisamos atualizar o anterior do nó seguinte para apontar de volta para o novo.
+    if(novo->proximo != NULL){
+    //novo->proximo-> ponteiro PROXIMO do novo nó aponta para o nó antigo.
+    //novo->proximo->anterior no antigo nó tem  ponteiro ANTERIOR que vai aponta para o novo;
+    novo->proximo->anterior = novo;
+       
     }
-    //IMMPORTATE ISSO MANTEM ORDENADO
-    // Se o valor do novo nó é menor que o primeiro nó da lista, ele deve ser colocado na frente.
-    else if(valor < p->inicio->chave) {
-        novo->proximo = p->inicio; //O novo nó passa a apontar para o antigo primeiro.
-        p->inicio->anterior = novo; //atrualiza o anterior do aantigo
-        p->inicio = novo;//atualiza
-    }
-    else{ //Se o valor do novo nó é maior que o primeiro no
-      PtrNoLista aux = p->inicio; //recebe o que ta no inicio
-      //enquando o proximo for diferente e null e proximo for o valor, entrar na posicao proxmo
-      while (aux->proximo != NULL && valor > aux->proximo->chave){
-        aux = aux->proximo; //avaca prox no
-      }
-      novo->proximo = aux->proximo; //o novo nó aponta para o próximo nó da lista
-      if(aux->proximo != NULL){
-        aux->proximo->anterior = novo;
-      }
-      aux->proximo = novo;
-      novo->anterior = aux;
-    }
+    p->head = novo;
     p->qtd++;
 }
-//sentido horario
+
+//ver tamanho da lista
+int tamanho(Lista *p){
+    int tam = p->qtd;
+    return tam;
+}
+
+//imprimir lista
 void imprimir(Lista *p){
-    PtrNoLista aux;
-    //inicia no incio, contua ate nao achar null, e a cada laco aux aponta para o proximo
-    for (aux = p->inicio; aux != NULL; aux = aux->proximo) {
-      printf("%d ", aux->chave);
-    }
-    
-        printf("\n");
-}
-//sentido antihorario
-void imprimirAnti(Lista *p){
-    PtrNoLista aux = p->inicio;
-    //primeiro ir ate o ultimo no
-    while (aux->proximo != NULL){
-      aux = aux->proximo;
-    } 
+    //nao cria nó na memoria e sim ponteiro (variavel local)
+    Node atual = p->head; //atual aponta para onde head aponta
 
-    //segungo percorre de tras para usar o ponteiro anterior
-    while (aux != NULL){
-      printf("%d ", aux->chave);
-      aux = aux->anterior;
+    //ver se a lista está vazia
+    if(atual == NULL){
+      printf("Lista vazia.\n");
+      return;
     }
-    
-    
+
+    printf("Elementos da lista: ");
+
+    while (atual != NULL){
+      printf("%d ", atual->dado);
+      atual = atual->proximo;
+    }
+    printf("\n");
 }
 
-int main() {
-  // variavel do tipoLista
-  Lista minhaLista;
+//void excluir(Lista *p, int valorBuscado){}
 
-    // 1 inicializar
-    inicializar(&minhaLista); // passa end para a funcao
+int main(){
 
-    // 2 ver se ta vazia
-    if (estaVazia(&minhaLista)) {
-        printf("Lista vazia\n");
-    }
+    //variavel tipo Lista
+    Lista minhaLista;
 
-    // 3 taanho lista
+    //enviando end de memoria da nova variavel, onde a funcao recebe ele no seu argumento e novo ponteiro
+    inicializa(&minhaLista);
+
+    //ver tamanho da lista
     int tam = tamanho(&minhaLista);
     printf("Tamanho da lista: %d \n", tam);
 
-    
-    inserir(&minhaLista, 5);
-    inserir(&minhaLista, 2);
-    inserir(&minhaLista, 1);
-    inserir(&minhaLista, 4);
-    inserir(&minhaLista, 6);
-    inserir(&minhaLista, 7);
-    inserir(&minhaLista, 3);
     imprimir(&minhaLista);
-    imprimirAnti(&minhaLista);
+
+    inserir(&minhaLista, 1);
+    inserir(&minhaLista, 2);
+    inserir(&minhaLista, 3);
+
+    tam = tamanho(&minhaLista);
+    printf("Tamanho da lista: %d \n", tam);
+
+    imprimir(&minhaLista);
+
+    //excluir(&minhaLista, 2);
+
+    tam = tamanho(&minhaLista);
+    printf("Tamanho da lista: %d \n", tam);
+
+    imprimir(&minhaLista);
+
+    return 0;
 }
