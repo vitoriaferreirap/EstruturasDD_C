@@ -17,11 +17,13 @@ typedef struct No{
 //criando lista
 typedef struct{
   Node head; //ponteiro inicial (head->Node)
+  int qtd;
 } Lista;
 
 //inicializa lista
 void inicializa(Lista *p){
     p->head = NULL; //nao existe nó aqui, head é o ponteiro que indica o incio da lista
+    printf("Lista inicializada \n");
 }
 
 //inserir
@@ -33,4 +35,24 @@ void inserir(Lista *p, int valor){
     //ligando novo nó a lista
     novo->proximo = p->head; //novo nó aponta para onde o antigo apontava
     p->head = novo;
+    p->qtd++;
+}
+
+//ver tamanho da lista
+int tamanho(Lista *p){
+    int tam = p->qtd;
+    return tam;
+}
+
+int main(){
+
+    //variavel tipo Lista
+    Lista minhaLista;
+
+    //enviando end de memoria da nova variavel, onde a funcao recebe ele no seu argumento e novo ponteiro
+    inicializa(&minhaLista);
+
+    //ver tamanho da lista
+    int tam = tamanho(&minhaLista);
+    printf("Tamanho da lista: %d \n", tam);
 }
