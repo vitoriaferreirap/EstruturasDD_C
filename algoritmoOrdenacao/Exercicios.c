@@ -22,15 +22,15 @@ void bubbleSort(int v[], int n){
         flag = 0;
         for (int i = 0; i <= N - 2; i++) {  // n - 2 regra
         comparacoes++;
-        if (v[i] > v[i + 1]) {
-            aux = v[i];
-            v[i] = v[i + 1];
-            v[i + 1] = aux;
-            trocas++;
-            flag = 1;
+            if (v[i] > v[i + 1]) {
+                aux = v[i];
+                v[i] = v[i + 1];
+                v[i + 1] = aux;
+                trocas++;
+                flag = 1;
+            }
         }
     }
-}
     //imprime O vetor ordenado; 
     //Quantas comparações o algoritmo fez; Quantas trocas o algoritmo fez
     
