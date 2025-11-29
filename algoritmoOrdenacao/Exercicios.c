@@ -8,8 +8,9 @@ void bubbleSort(int v[], int n){
     int flag = 1;
     int comparacoes = 0;
     int trocas = 0;
+   
 
-    printf("\n================ TENTATIVA %d ================\n", tentativa);
+    printf("\n=== TENTATIVA - bubbleSort %d ===\n", tentativa);
     // imprimir :vetor original;
     printf("Vetor original:\n", tentativa);
     for (int i = 0; i < n; i++) {
@@ -46,7 +47,53 @@ void bubbleSort(int v[], int n){
 }
 
 // funcao alg ordenacao Select Sort
-// imprimir :O vetor original; O vetor ordenado; Quantas comparações o algoritmo fez; Quantas trocas o algoritmo fez
+void selectSort(int v[], int n){
+    int comparacoes = 0;
+    int trocas = 0;
+    int i, j, menor, aux;
+    static int tentativa = 1;
+
+    printf("\n=== TENTATIVA - selectsort %d ===\n", tentativa);
+    // imprimir :vetor original;
+    printf("Vetor original:\n", tentativa);
+    for (int i = 0; i < n; i++) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");  
+
+
+    //selectSort
+    for (i = 0; i < N-1; i++){
+        menor = i; //recebe indice
+
+        for (j = i+1; j < N; j++){
+            if(v[j] < v[menor]){
+                menor = j;
+            }
+            comparacoes++;
+        } 
+        //atualiza as trocas
+        if (menor != i) {
+            aux = v[i];
+            v[i] = v[menor]; //recebe valor indicado no indice
+            v[menor] = aux; //guarda indice
+            trocas++;   
+        }
+    }
+    //imprime O vetor ordenado; 
+    //Quantas comparações o algoritmo fez; Quantas trocas o algoritmo fez
+    
+    printf("Vetor ordenado:\n");
+    for (int i = 0; i < n; i++){
+        printf("%d ", v[i]);
+    }
+    printf("\n");    
+
+    printf("\nComparacoes: %d\n", comparacoes);
+    printf("Trocas: %d\n", trocas);
+    tentativa++;
+
+}
 
 // funcao alg ordenacao Insert Sort
 // imprimir :O vetor original; O vetor ordenado; Quantas comparações o algoritmo fez; Quantas trocas o algoritmo fez
@@ -78,6 +125,10 @@ int main() {
     bubbleSort(vCrescente, N);  //O(n)
     bubbleSort(vDecrescente, N); //O(N)2 muita troca    
     bubbleSort(vAleatorio, N); //O(N)2
+
+    selectSort(vCrescente, N);  
+    selectSort(vDecrescente, N);   
+    selectSort(vAleatorio, N); 
 
     return 0;
 }
