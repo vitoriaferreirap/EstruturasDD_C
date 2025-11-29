@@ -63,10 +63,10 @@ void selectSort(int v[], int n){
 
 
     //selectSort
-    for (i = 0; i < N-1; i++){
+    for (i = 0; i < n-1; i++){
         menor = i; //recebe indice
 
-        for (j = i+1; j < N; j++){
+        for (j = i+1; j < n; j++){
             if(v[j] < v[menor]){
                 menor = j;
             }
@@ -103,32 +103,39 @@ void selectSort(int v[], int n){
 
 
 int main() { 
-    int vCrescente[N];
-    int vDecrescente[N];
-    int vAleatorio[N];
+    int vCrescenteB[N];
+    int vDecrescenteB[N];
+    int vAleatorioB[N];
+
+    int vCrescenteS[N];
+    int vDecrescenteS[N];
+    int vAleatorioS[N];
 
     // vetores NÃO ordenados pelo algoritmo, gerado com base em fórmulas
     // vetor ordenado crescente - ja ordenado
     for (int i = 0; i < N; i++){
-        vCrescente[i] = i;
+        vCrescenteB[i] = i;
+        vCrescenteS[i] = i;
     }
     // vetor ordenado descescente 
     for (int i = 0; i < N; i++){
-        vDecrescente[i] = N - 1 - i;
+        vDecrescenteB[i] = N - 1 - i;
+        vDecrescenteS[i] = N - 1 - i;
     }
     // vetor aleatorio
     for (int i = 0; i < N; i++){
-        vAleatorio[i] = rand() % 10000;
+        vAleatorioB[i] = rand() % 10000;
+        vAleatorioS[i] = rand() % 10000;
     }
 
     // aplicar algoritmo de ordenacao em cada vator de cima
-    bubbleSort(vCrescente, N);  //O(n)
-    bubbleSort(vDecrescente, N); //O(N)2 muita troca    
-    bubbleSort(vAleatorio, N); //O(N)2
+    bubbleSort(vCrescenteB, N);  //O(n) por estar ordenado
+    bubbleSort(vDecrescenteB, N); //O(N)2 muita troca    
+    bubbleSort(vAleatorioB, N); //O(N)2
 
-    selectSort(vCrescente, N);  
-    selectSort(vDecrescente, N);   
-    selectSort(vAleatorio, N); 
+    selectSort(vCrescenteS, N);   //O(n) por estar ordenado
+    selectSort(vDecrescenteS, N);  //O(N)2 muita troca  
+    selectSort(vAleatorioS, N); //O(N)2 
 
     return 0;
 }
