@@ -141,7 +141,77 @@ void insertSort(int v[], int n){
 }
 
 // funcao alg ordenacao Quick Sort
-// imprimir :O vetor original; O vetor ordenado; Quantas comparações o algoritmo fez; Quantas trocas o algoritmo fez
+void quickSortImprime(int v[], int n){
+    int inicio = 0;
+    int fim = N - 1;
+    int comparacoes = 0;
+    int trocas = 0;
+    static int tentativa = 1;
+
+    printf("\n=== TENTATIVA - quickSort %d ===\n", tentativa);
+    printf("Vetor original:\n");
+    for (int i = 0; i < n; i++){
+        printf("%d ", v[i]);
+    } 
+    printf("\n");
+
+    // chama a função recursiva de ordenação
+    quickSort(v, inicio, fim, &comparacoes, &trocas);
+
+    // imprime vetor ordenado
+    printf("Vetor ordenado:\n");
+    for (int i = 0; i < n; i++) printf("%d ", v[i]);
+    printf("\n");
+
+    printf("Comparacoes: %d\nTrocas: %d\n", comparacoes, trocas);
+    tentativa++;
+}
+
+void quickSort(int v[], int inicio, int fim, int *comparacoes, int *trocas){
+    if (inicio < fim) {
+    int p = particiona(v, inicio, fim, comparacoes, trocas);
+
+    // recursao só apos retorno do p
+    quickSort(v, inicio, p - 1, comparacoes, trocas);  // esquerda: de inicio até p-1 (<= pivo)
+    quickSort(v, p + 1, fim, comparacoes, trocas);     // direita: de p até fim (> pivo)
+    }
+}
+
+
+int particiona(int v[], int inicio, int fim, int *comparacoes, int *trocas) { 
+    int pivo = v[inicio]; 
+    int esquerda = inicio + 1; //comeca apos pivo
+    int direita = fim;
+    int aux;
+
+    while (esquerda <= direita){
+        //anda ->
+        while (esquerda <= fim && v[esquerda] <= pivo){
+            esquerda++;
+            (*comparacoes)++; //necessario para incrementar valores que os ponteiros apontam
+        }
+        //anda <-
+        while (direita >= inicio && v[direita] > pivo){
+            direita--;
+            (*comparacoes)++;
+        }
+        //se ainda nao tiverem se cruzado
+        if(esquerda < direita){
+            aux = v[esquerda];
+            v[esquerda] = v[direita];
+            v[direita] = aux;
+        (*trocas)++;
+        }
+    }
+        //troca final do pivo
+        aux = v[direita];
+        v[direita] = v[inicio];
+        v[inicio] = aux;
+        (*trocas)++;
+
+        return direita;
+}
+
 
 
 int main() { 
@@ -160,7 +230,7 @@ int main() {
     int vCrescenteQ[N];
     int vDecrescenteQ[N];
     int vAleatorioQ[N];
-
+    
 
     // vetores chegam nas funcoes NÃO ordenados pelo algoritmo, gerado com base em fórmulas
     // vetor ordenado crescente - ja ordenado
@@ -204,9 +274,10 @@ int main() {
     insertSort(vAleatorioI, N); //O(N)2 
 
     //Quick Sort 
-    quickSort(vCrescenteQ, N);   
-    quickSort(vDecrescenteQ, N);  
-    quickSort(vAleatorioQ, N); 
+    //melhor caso O(n log n), pior caso - ja ordenado é O(n)2 o pivo sendo a posicao 0 
+    quickSortImprime(vCrescenteQ, N);  //O(n)2
+    quickSortImprime(vDecrescenteQ, N);  //O(n)2
+    quickSortImprime(vAleatorioQ, N); //O(n log n)
 
     return 0;
 }
